@@ -1,10 +1,15 @@
 #!/bin/bash
 set -euo pipefail
-# Opens an interactive shell in the apptainer environment.
+# Opens an interactive shell in the container environment.
 #
-# Run from the main script directory, not from the apptainer directory.
-# Requires a prepared ~/apphome directory with an apptainer image
+# Run from the repository root, not from the container directory.
+# Requires a prepared ~/apphome directory with a container image
 # and an installed Python virtual environment.
+#
+# Source container-env.sh or set CONTAINER_CMD to override the runtime.
+
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
+source "$SCRIPT_DIR/container-env.sh"
 
 CHOME="${APPHOME:-$HOME/apphome}"
 echo "Using CHOME=$CHOME"
@@ -12,10 +17,7 @@ echo "Using CHOME=$CHOME"
 CURRENT_DIR=$(basename "$(pwd)")
 echo "Current directory: $CURRENT_DIR"
 
-# load apptainer module if it is not available by default
-# module load apptainer
-
-apptainer shell --nv \
+"$CONTAINER_CMD" shell --nv \
     --home "$CHOME" \
     --bind "$(pwd):/home/$CURRENT_DIR" \
     --pwd /home/$CURRENT_DIR \

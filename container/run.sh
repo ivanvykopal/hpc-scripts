@@ -20,11 +20,11 @@ echo "Current directory: $CURRENT_DIR"
 # load apptainer module if it is not available by default
 # module load apptainer
 
-apptainer exec --nv \
+"$CONTAINER_CMD" exec --nv \
     --home "$CHOME" \
     --bind "$(pwd):/home/$CURRENT_DIR" \
     --pwd /home/$CURRENT_DIR \
     --env VIRTUAL_ENV="$CHOME/venv" \
     --env PATH="$CHOME/.local/bin:$CHOME/venv/bin:$PATH" \
     "$CHOME/cuda.sif" \
-    bash apptainer/run-script.sh "$1" $OTHER_ARGS
+    bash container/run-script.sh $ALL_ARGS
